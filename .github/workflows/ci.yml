@@ -1,0 +1,42 @@
+# Name of the GitHub Actions workflow
+name: Continuous Integration
+
+# This section defines when the workflow should be triggered
+on:
+  push: # Runs on every push to any branch
+  pull_request: # Runs on every pull request to any branch
+
+jobs:
+  build: # Defines a job named 'build'
+    runs-on: ubuntu-latest # The job runs on an Ubuntu Linux virtual machine
+
+    steps:
+      # Step 1: Checkout the repository (clone the code into the runner)
+      - name: Checkout Repository
+        uses: actions/checkout@v2 # Official GitHub action to checkout the repo
+        with:
+          fetch-depth: 0 # Fetch full Git history to ensure proper commit linting
+
+      # Step 2: Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v2 # Official GitHub action to install Node.js
+        with:
+          node-version: '20.9.0' # Specifies Node.js version to use
+
+      # Step 3: Install project dependencies from package.json
+      - name: Install Dependencies
+        run: npm install # Installs all dependencies (like eslint, prettier, etc.)
+
+      # Step 4: Run linting to check for code style issues
+      - name: Run Linters
+        run: npm run lint # Executes the `lint` script from package.json
+
+      # Step 5: Check code formatting using Prettier or other formatting tools
+      - name: Run Format Check
+        run: npm run format # Executes the `format` script from package.json
+
+      # Step 6: Validate commit messages using commitlint
+      - name: Check Commit Messages
+        uses: wagoid/commitlint-github-action@v3 # Runs commitlint GitHub action
+        with:
+          configFile: commitlint.config.cjs # Specifies the commitlint configuration file
