@@ -1,0 +1,40 @@
+# Name of the GitHub Actions workflow
+name: Continuous Deployment
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: Use Node.js
+        uses: actions/setup-node@v2 # Official GitHub action to install Node.js
+        with:
+          node-version: '20.9.0' # Specifies Node.js version to use
+
+      # Step 3: Install project dependencies from package.json
+      - name: Install Dependencies
+        run:
+          npm install # Installs all dependencies (like eslint, prettier, etc.)
+
+
+          # Step 3: Install project dependencies from package.json
+      - name: Build
+        run: npm run build # Installs all dependencies (like eslint, prettier, etc.)
+
+      - name: Deploy to prod url
+        # main is the branch name where new code is pushed
+        if: github.ref == 'refs/heads/main'
+
+        uses: JamesIves/github-pages-deploy-action@4.1.4
+        with:
+          branch: gh-pages # The branch the action should deploy to.
+          folder: dist # The folder the action should deploy.
