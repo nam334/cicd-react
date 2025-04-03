@@ -31,19 +31,17 @@
     "lint-staged": "^15.5.0",
     "prettier": "^3.5.3",
     "vite": "^6.2.0"
-  }, 
+  },
   "husky": {
-  "hooks": {
-    "pre-commit": "lint-staged",
-    "pre-push": "npm run lint && npm run format"
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run lint && npm run format"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx}": [
+      "npm run lint",
+      "npm run format"
+    ]
   }
-},
-"lint-staged": {
-  "src/**/*.{js,jsx}": [
-    "npm run lint",
-    "npm run format"
-  ]
-}
-
-
 }
